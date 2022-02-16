@@ -241,10 +241,12 @@ async def echo(bot, update):
                         
                     else:
                         # special weird case :\
+                        
                         callback_data=(cb_string_file).encode("UTF-8")
                     
                 if duration is not None:
-                    callback_data=(cb_string_file).encode("UTF-8")
+                    cb_string = "{}|{}|{}".format("audio", "320k", "mp3")
+                    callback_data=cb_string.encode("UTF-8")
             else:
                 format_id = response_json["format_id"]
                 format_ext = response_json["ext"]
@@ -253,23 +255,8 @@ async def echo(bot, update):
                 cb_string_video = "{}|{}|{}".format(
                     "video", format_id, format_ext)
                 callback_data=(cb_string_file).encode("UTF-8")
-            # logger.info(reply_markup)
-            thumbnail = Config.DEF_THUMB_NAIL_VID_S
-            thumbnail_image = Config.DEF_THUMB_NAIL_VID_S
-            if "thumbnail" in response_json:
-                if response_json["thumbnail"] is not None:
-                    thumbnail = response_json["thumbnail"]
-                    thumbnail_image = response_json["thumbnail"]
-            thumb_image_path = DownLoadFile(
-                thumbnail_image,
-                Config.DOWNLOAD_LOCATION + "/" +
-                str(update.from_user.id) + ".webp",
-                Config.CHUNK_SIZE,
-                None,  # bot,
-                Translation.DOWNLOAD_START,
-                update.message_id,
-                update.chat.id
-            )
+            reply_markup = InlineKeyboardMarkup(inline_keyboard)
+            
             if os.path.exists(thumb_image_path):
                 im = Image.open(thumb_image_path).convert("RGB")
                 im.save(thumb_image_path.replace(".webp", ".jpg"), "jpeg")
@@ -284,6 +271,10 @@ async def echo(bot, update):
             )
         else:
             # fallback for nonnumeric port a.k.a seedbox.io
+            cb_string_file = "{}={}={}".format(
+                "file", "LFO", "NONE")
+            cb_string_video = "{}={}={}".format(
+                "video", "OFL", "ENON")
             callback_data=(cb_string_file).encode("UTF-8")
             reply_markup = InlineKeyboardMarkup(inline_keyboard)
             await bot.send_message(
