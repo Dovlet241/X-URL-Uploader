@@ -1,32 +1,3 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@Dovlet241 
-X-Gorn
-/
-X-URL-Uploader
-Public template
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-X-URL-Uploader/plugins/youtube_dl_echo.py /
-@X-Gorn
-X-Gorn Update youtube_dl_echo.py
-Latest commit f863bce on Oct 21, 2021
- History
- 3 contributors
-@X-Gorn@SpEcHiDe@TGExplore
-376 lines (371 sloc)  16.3 KB
-   
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # (c) Shrimadhav U K | X-Noid
@@ -403,16 +374,3 @@ async def echo(bot, update):
                 parse_mode="html",
                 reply_to_message_id=update.message_id
             )
-© 2022 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-Loading complete
