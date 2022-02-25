@@ -16,6 +16,10 @@ import os
 import shutil
 import time
 from datetime import datetime
+import subprocess
+import logzero
+logger = logzero.logger
+MAX_SPLIT_SIZE = 1900
 
 # the secret configuration specific things
 if bool(os.environ.get("WEBHOOK", False)):
@@ -120,12 +124,53 @@ async def ddl_call_back(bot, update):
             download_directory = os.path.splitext(download_directory)[0] + "." + "mkv"
             # https://stackoverflow.com/a/678242/4723940
             file_size = os.stat(download_directory).st_size
+            
+            ####################################my code to split file into chunks of 2GB
+        
         if file_size > Config.TG_MAX_FILE_SIZE:
-            await bot.edit_message_text(
-                chat_id=update.message.chat.id,
-                text=Translation.RCHD_TG_API_LIMIT,
-                message_id=update.message.message_id
-            )
+            thumb_image_path = None
+            tg_send_type == "file"
+            files_directory = do_file_split(download_directory)
+            for x in files_directory:
+                #try to upload zip files
+                start_time = time.time()
+                if tg_send_type == "file":
+                    user = await bot.get_me()
+                    mention = user["mention"]
+                    document = await bot.send_document(
+                        chat_id=update.message.chat.id,
+                        thumb=thumb_image_path,
+                        document=x,
+                        caption=description + f"\n\nSubmitted by {update.from_user.mention}\nUploaded by {mention}",
+                        # reply_markup=reply_markup,
+                        reply_to_message_id=update.message.reply_to_message.message_id,
+                        progress=progress_for_pyrogram,
+                        progress_args=(
+                            Translation.UPLOAD_START,
+                            update.message,
+                            start_time
+                        )
+                    )
+                else:
+                    logger.info("Did this happen? :\\")
+                end_two = datetime.now()
+                try:
+                    os.remove(x)
+                    os.remove(download_directory)
+                    os.remove(thumb_image_path)
+                except:
+                    pass
+                time_taken_for_download = (end_one - start).seconds
+                time_taken_for_upload = (end_two - end_one).seconds
+                
+                await bot.edit_message_text(
+                    text=Translation.AFTER_SUCCESSFUL_UPLOAD_MSG_WITH_TS.format(time_taken_for_download, time_taken_for_upload),
+                    chat_id=update.message.chat.id,
+                    message_id=update.message.message_id,
+                    disable_web_page_preview=True
+                )
+            
+            ##############################END my code to split file into chunks of 2GB
         else:
             # get the correct width, height, and duration for videos greater than 10MB
             # ref: message from @BotSupport
@@ -324,3 +369,45 @@ ETA: {}""".format(
                         logger.info(str(e))
                         pass
         return await response.release()
+        
+        
+def file_split_7z(file_path, split_size=MAX_SPLIT_SIZE):
+    file_path_7z_list = []
+    # if origin file is 7z file rename it
+    origin_file_path = ""
+    if os.path.splitext(file_path)[1] == ".7z":
+        origin_file_path = file_path
+        file_path = os.path.splitext(origin_file_path)[0] + ".7zo"
+        os.rename(origin_file_path, file_path)
+    # do 7z compress
+    fz = os.path.getsize(file_path) / 1024 / 1024
+    pa = math.ceil(fz / split_size)
+    head, ext = os.path.splitext(os.path.abspath(file_path))
+    archive_head = "".join((head, ext.replace(".", "_"))) + ".7z"
+    for i in range(pa):
+        check_file_name = "{}.{:03d}".format(archive_head, i + 1)
+        if os.path.isfile(check_file_name):
+            logger.debug("remove exists file | {}".format(check_file_name))
+            os.remove(check_file_name)
+    cmd_7z = ["7z", "a", "-v{}m".format(split_size), "-y", "-mx0", archive_head, file_path]
+    proc = subprocess.Popen(cmd_7z, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = proc.communicate()
+    if b"Everything is Ok" not in out:
+        logger.error("7z output | {}".format(out.decode("utf-8")))
+        logger.error("7z error | {}".format(err.decode("utf-8")))
+        return file_path_7z_list
+
+    for i in range(pa):
+        file_path_7z_list.append("{}.{:03d}".format(archive_head, i + 1))
+    # if origin file is 7z file rename it back
+    if origin_file_path:
+        os.rename(file_path, origin_file_path)
+    return file_path_7z_list
+
+def do_file_split(file_path, split_size=MAX_SPLIT_SIZE):
+    file_size = os.path.getsize(file_path) / 2 ** 20
+    split_part = math.ceil(file_size / split_size)
+    new_split_size = math.ceil(file_size / split_part)
+    logger.info("file size | {} | split num | {} | split size | {}".format(file_size, split_part, new_split_size))
+    file_path_7z_list = file_split_7z(file_path, split_size=new_split_size)
+    return file_path_7z_list
