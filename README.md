@@ -1,26 +1,14 @@
-## X-URL-Uploader (Bot)
+## X-URL-Uploader ( SPLIT Files more than 2GB into pieces)
 ---
 
-Telegram RoBot to Upload Links.
+Telegram RoBot to Upload Links. 
 
 **Features**:
 
-👉 Only Auth Users (AUTH_USERS) Can Use The Bot
+It is a fork of X-Gorn Uploader that split file that is more than 2GB into pieces and then upload those files to Telegram.
 
-👉 Upload [YTDL Supported Links](https://ytdl-org.github.io/youtube-dl/supportedsites.html) to Telegram.
-
-👉 Upload HTTP/HTTPS as File/Video to Telegram.
-
-👉 Upload Mediafire, Zippyshare, Hxfile, Anonfiles, Antfiles URL using LK21
-
-**For Devs**:
-
-👉 [X-URL-Uploader-dev](https://github.com/X-Gorn/X-URL-Uploader/tree/dev)
-
-## Telegram Support:
-
-[![Channel](https://img.shields.io/badge/TG-Channel-30302f?style=flat&logo=telegram)](https://t.me/xTeamBots)
-[![Group](https://img.shields.io/badge/TG-Group-30302f?style=flat&logo=telegram)](https://t.me/xTeamBotsSupport)
+I am not a programmer and i changed code for my project. so i crippled the code to handle every video,audio,file as "File" wihtout thumbnail.
+if you want to have original X-Gorn features, change it your own.
 
 ## Credits, and Thanks to:
 
@@ -28,6 +16,7 @@ Telegram RoBot to Upload Links.
 * [@SpEcHlDe](https://t.me/ThankTelegram) for his [AnyDLBot](https://telegram.dog/AnyDLBot)
 * [Dan Tès](https://t.me/haskell) for his [Pyrogram Library](https://github.com/pyrogram/pyrogram)
 * [Yoily](https://t.me/YoilyL) for his [UploaditBot](https://telegram.dog/UploaditBot)
+* https://github.com/X-Gorn/X-URL-Uploader
 
 #### LICENSE
 - GPLv3
