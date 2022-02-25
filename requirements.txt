@@ -12,4 +12,3 @@ lk21
 filetype
 tldextract
 logzero
-py7zr
