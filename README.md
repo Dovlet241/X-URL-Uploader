@@ -10,6 +10,8 @@ It is a fork of X-Gorn Uploader that split file that is more than 2GB into piece
 I am not a programmer and i changed code for my project. so i crippled the code to handle every video,audio,file as "File" wihtout thumbnail.
 if you want to have original X-Gorn features, change it your own.
 
+this code use p7zip for split files, make sure you have p7zip-full on your machine. or use "sudo apt install p7zip-full" .
+
 ## Credits, and Thanks to:
 
 * [@TGExplore](https://t.me/ViruZs) for his [TG-URL-Uploader](https://github.com/TGExplore/TG-URL-Uploader)
