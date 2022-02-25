@@ -9,6 +9,7 @@ You can upload HTTP/HTTPS direct link, Using this bot!
 URL | filename | username | password"""
     DOWNLOAD_START = "Now Downloading.."
     UPLOAD_START = "Now Uploading.."
+    UPLOAD_FINISHED = "Upload Finished!"
     RCHD_TG_API_LIMIT = "Downloaded in {} seconds.\nDetected File Size: {}\nSorry. But, I cannot upload files greater than 2GB due to Telegram API limitations."
     AFTER_SUCCESSFUL_UPLOAD_MSG = "Thanks for using @xurluploaderbot)"
     AFTER_SUCCESSFUL_UPLOAD_MSG_WITH_TS = "Downloaded in {} seconds.\nUploaded in {} seconds.\n\n@xurluploaderbot"
@@ -32,3 +33,4 @@ If bot didn't respond, contact @xgorn"""
     CANCEL_STR = "Process Cancelled"
     ZIP_UPLOADED_STR = "Uploaded {} files in {} seconds"
     SLOW_URL_DECED = "Gosh that seems to be a very slow URL. Since you were screwing my home, I am in no mood to download this file. Meanwhile, why don't you try this:==> https://shrtz.me/PtsVnf6 and get me a fast URL so that I can upload to Telegram, without me slowing down for other users."
+    
